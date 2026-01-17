@@ -3,7 +3,7 @@
 import { motion, useTransform, useScroll } from "framer-motion";
 import { RefObject } from "react";
 
-export default function Overlay({ containerRef }: { containerRef: RefObject<HTMLDivElement> }) {
+export default function Overlay({ containerRef }: { containerRef: RefObject<HTMLDivElement | null> }) {
 
     // Track the same container as the canvas
     const { scrollYProgress } = useScroll({
