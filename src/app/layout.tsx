@@ -4,8 +4,8 @@ import SmoothScroll from "./components/SmoothScroll";
 import Noise from "./components/Noise";
 
 export const metadata: Metadata = {
-  title: "Creative Developer Portfolio",
-  description: "High-end scrollytelling portfolio showcasing digital experiences",
+  title: "Muhammad Shahroze",
+  description: "Muhammad Shahroze Portfolio",
 };
 
 export default function RootLayout({
