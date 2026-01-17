@@ -5,7 +5,7 @@ import { useScroll } from "framer-motion";
 
 const FRAME_COUNT = 128;
 
-export default function ScrollyCanvas({ containerRef }: { containerRef: RefObject<HTMLElement> }) {
+export default function ScrollyCanvas({ containerRef }: { containerRef: RefObject<HTMLDivElement> }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imagesRef = useRef<HTMLImageElement[]>([]);
     const currentFrameRef = useRef(0);
