@@ -9,22 +9,19 @@ export default function Footer() {
                         Talk
                     </h2>
                     <div className="mt-12 md:mt-0 flex flex-col gap-4 text-right">
-                        <a href="mailto:hello@example.com" className="text-2xl md:text-3xl hover:text-accent transition-colors">
-                            hello@example.com
+                        <a href="mailto:smshahroze16602@gmail.com" className="text-2xl md:text-3xl hover:text-accent transition-colors">
+                            smshahroze16602@gmail.com
                         </a>
                         <p className="text-gray-500">
-                            New York, NY <br />
-                            EST 10:42 AM
+                            Multan, Pakistan
                         </p>
                     </div>
                 </div>
 
                 <div className="flex justify-between items-center text-sm font-mono text-gray-600 uppercase tracking-wider border-t border-white/10 pt-8">
-                    <p>© 2025 Portfolio</p>
+                    <p>© 2025 Muhammad Shahroze</p>
                     <div className="flex gap-8">
-                        <a href="#" className="hover:text-white transition-colors">Instagram</a>
-                        <a href="#" className="hover:text-white transition-colors">Twitter</a>
-                        <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+                        <a href="https://linkedin.com/in/muhammad-shahroze" className="hover:text-white transition-colors">LinkedIn</a>
                     </div>
                 </div>
             </div>

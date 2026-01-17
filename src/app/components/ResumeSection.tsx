@@ -8,7 +8,6 @@ import Experience from './Experience';
 import ResumeProjects from './ResumeProjects';
 import Education from './Education';
 import Certifications from './Certifications';
-import Interests from './Interests';
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -51,7 +50,6 @@ export default function ResumeSection() {
                     <Skills />
                     <Education />
                     <Certifications />
-                    <Interests />
                 </div>
 
                 {/* Right Column: Experience, Projects */}

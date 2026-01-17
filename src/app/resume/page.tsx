@@ -2,7 +2,7 @@
 
 import ResumeSection from "../components/ResumeSection";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Contact from "../components/Contact";
 
 export default function ResumePage() {
     return (
@@ -11,7 +11,7 @@ export default function ResumePage() {
             <div className="pt-24">
                 <ResumeSection />
             </div>
-            <Footer />
+            <Contact />
         </main>
     );
 }
