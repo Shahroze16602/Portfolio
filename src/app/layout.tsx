@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
 import Noise from "./components/Noise";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Muhammad Shahroze",
@@ -20,6 +21,7 @@ export default function RootLayout({
           <Noise />
           {children}
         </SmoothScroll>
+        <Analytics />
       </body>
     </html>
   );
