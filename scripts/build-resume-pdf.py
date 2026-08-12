@@ -4,11 +4,10 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_RIGHT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
-from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import KeepTogether, PageBreak, Paragraph, SimpleDocTemplate, Spacer
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "tmp" / "pdfs" / "resume-data.json"
@@ -20,114 +19,148 @@ with DATA_PATH.open("r", encoding="utf-8") as stream:
 
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
-INK = colors.HexColor("#151513")
-BLUE = colors.HexColor("#2446FF")
-MUTED = colors.HexColor("#66645E")
-LINE = colors.HexColor("#D2D0C8")
-PAPER = colors.HexColor("#FAF9F5")
+INK = colors.HexColor("#171717")
+ACCENT = colors.HexColor("#1746A2")
+MUTED = colors.HexColor("#444444")
+
 
 def clean(value):
     return str(value).replace("—", "-").replace("–", "-").replace("→", "->").replace("·", "|").replace("&", "and")
 
+
 def safe(value):
     return escape(clean(value))
 
+
 styles = getSampleStyleSheet()
-styles.add(ParagraphStyle(name="Kicker", parent=styles["Normal"], fontName="Courier-Bold", fontSize=6.8, leading=9, textColor=BLUE, spaceAfter=5, uppercase=True))
-styles.add(ParagraphStyle(name="Name", parent=styles["Heading1"], fontName="Helvetica-Bold", fontSize=28, leading=29, tracking=-1.1, textColor=INK, spaceAfter=3))
-styles.add(ParagraphStyle(name="Role", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=11, leading=14, textColor=BLUE))
-styles.add(ParagraphStyle(name="Heading", parent=styles["Heading2"], fontName="Helvetica-Bold", fontSize=17, leading=19, tracking=-.4, textColor=INK, spaceBefore=4, spaceAfter=6))
-styles.add(ParagraphStyle(name="Subheading", parent=styles["Heading3"], fontName="Helvetica-Bold", fontSize=10.5, leading=12.5, textColor=INK, spaceAfter=2))
-styles.add(ParagraphStyle(name="BodySmall", parent=styles["Normal"], fontName="Helvetica", fontSize=8.2, leading=11.2, textColor=MUTED))
-styles.add(ParagraphStyle(name="Body", parent=styles["Normal"], fontName="Helvetica", fontSize=9, leading=12.5, textColor=MUTED))
-styles.add(ParagraphStyle(name="Meta", parent=styles["Normal"], fontName="Courier", fontSize=6.5, leading=8.5, textColor=MUTED))
-styles.add(ParagraphStyle(name="MetaRight", parent=styles["Meta"], alignment=TA_RIGHT))
-styles.add(ParagraphStyle(name="ProjectTitle", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=9, leading=11, textColor=INK))
-styles.add(ParagraphStyle(name="ProjectSignal", parent=styles["Normal"], fontName="Courier-Bold", fontSize=6.2, leading=8, textColor=BLUE, alignment=TA_RIGHT))
+styles.add(ParagraphStyle(name="ResumeName", parent=styles["Heading1"], fontName="Helvetica-Bold", fontSize=25, leading=28, textColor=INK, spaceAfter=2))
+styles.add(ParagraphStyle(name="ResumeTitle", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=11.5, leading=14, textColor=ACCENT, spaceAfter=4))
+styles.add(ParagraphStyle(name="Contact", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=12.5, textColor=MUTED, spaceAfter=1))
+styles.add(ParagraphStyle(name="Section", parent=styles["Heading2"], fontName="Helvetica-Bold", fontSize=11.5, leading=14, textColor=INK, spaceBefore=8, spaceAfter=4, borderWidth=0, borderPadding=0))
+styles.add(ParagraphStyle(name="Body", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=13.2, textColor=MUTED, spaceAfter=3))
+styles.add(ParagraphStyle(name="Skill", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=12.2, textColor=MUTED, spaceAfter=2))
+styles.add(ParagraphStyle(name="Role", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=10.5, leading=13, textColor=INK, spaceAfter=1))
+styles.add(ParagraphStyle(name="Meta", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=12, textColor=MUTED, spaceAfter=3))
+styles.add(ParagraphStyle(name="ResumeBullet", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=12.2, leftIndent=10, firstLineIndent=-7, textColor=MUTED, spaceAfter=2))
+styles.add(ParagraphStyle(name="Project", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=12, textColor=MUTED, spaceAfter=2))
+styles.add(ParagraphStyle(name="Note", parent=styles["Normal"], fontName="Helvetica-Oblique", fontSize=10, leading=12, textColor=MUTED, spaceAfter=4))
 
-def footer(canvas, doc):
-    canvas.saveState()
-    width, _ = A4
-    canvas.setStrokeColor(LINE)
-    canvas.line(16*mm, 12*mm, width-16*mm, 12*mm)
-    canvas.setFont("Courier", 6)
-    canvas.setFillColor(MUTED)
-    canvas.drawString(16*mm, 7.5*mm, "MUHAMMAD SHAHROZE / ANDROID ENGINEER")
-    canvas.drawRightString(width-16*mm, 7.5*mm, f"PAGE {doc.page}")
-    canvas.restoreState()
 
-doc = SimpleDocTemplate(str(OUTPUT), pagesize=A4, rightMargin=16*mm, leftMargin=16*mm, topMargin=15*mm, bottomMargin=17*mm, title="Muhammad Shahroze - Android Engineer", author="Muhammad Shahroze")
-story = []
+def section(title):
+    return Paragraph(safe(title.upper()), styles["Section"])
+
+
+def bullet(text):
+    return Paragraph(f"- {safe(text)}", styles["ResumeBullet"])
+
+
+def skill(label, value):
+    return Paragraph(f"<b>{safe(label)}:</b> {safe(value)}", styles["Skill"])
+
+
+def project_line(title, signal, details):
+    signal_text = f" | {safe(signal)}" if signal else ""
+    return Paragraph(f"<b>{safe(title)}</b>{signal_text}<br/>{safe(details)}", styles["Project"])
+
+
+def compact_project_line(title, signal, details):
+    signal_text = f" | {safe(signal)}" if signal else ""
+    return Paragraph(f"<b>{safe(title)}</b>{signal_text} - {safe(details)}", styles["Project"])
+
+
+doc = SimpleDocTemplate(
+    str(OUTPUT),
+    pagesize=A4,
+    rightMargin=17 * mm,
+    leftMargin=17 * mm,
+    topMargin=15 * mm,
+    bottomMargin=15 * mm,
+    title="Muhammad Shahroze - Android Engineer Resume",
+    author="Muhammad Shahroze",
+    subject="ATS-friendly resume for Android engineering roles",
+)
 
 profile = data["profile"]
-header_left = [Paragraph(safe(profile["name"]), styles["Name"]), Paragraph("ANDROID ENGINEER", styles["Role"])]
-header_right = Paragraph("<br/>".join([safe(profile["email"]), safe(profile["linkedin"].replace("https://", "")), safe(profile["github"].replace("https://", "")), safe(profile["location"]), "Remote: US and Europe | Hybrid: Islamabad | Collaborations"]), styles["MetaRight"])
-header = Table([[header_left, header_right]], colWidths=[118*mm, 54*mm])
-header.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "BOTTOM"), ("BOTTOMPADDING", (0,0), (-1,-1), 7), ("LINEBELOW", (0,0), (-1,-1), .8, INK)]))
-story += [header, Spacer(1, 6*mm), Paragraph("PROFESSIONAL SUMMARY", styles["Kicker"]), Paragraph("Android engineer with 3+ years of experience building and maintaining native products across maps, productivity, AI-backed utilities, media, billing, Firebase, monetization, and production reliability.", styles["Body"]), Spacer(1, 5*mm)]
-
-value_rows = [[
-    [Paragraph("FROM-SCRATCH DELIVERY", styles["Kicker"]), Paragraph("Native Android implementation from architecture through Play release.", styles["BodySmall"])],
-    [Paragraph("PRODUCTION RESCUE", styles["Kicker"]), Paragraph("Inherited codebases, crash and ANR work, feature repair, and modernization.", styles["BodySmall"])],
-    [Paragraph("COMMERCIAL SYSTEMS", styles["Kicker"]), Paragraph("Billing, subscriptions, one-time purchases, ads, and premium experiences.", styles["BodySmall"])],
-]]
-value_table = Table(value_rows, colWidths=[57.3*mm, 57.3*mm, 57.3*mm])
-value_table.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP"), ("BOX", (0,0), (-1,-1), .35, LINE), ("INNERGRID", (0,0), (-1,-1), .35, LINE), ("TOPPADDING", (0,0), (-1,-1), 7), ("BOTTOMPADDING", (0,0), (-1,-1), 7), ("LEFTPADDING", (0,0), (-1,-1), 7), ("RIGHTPADDING", (0,0), (-1,-1), 7)]))
-story += [value_table, Spacer(1, 6*mm)]
-
-story.append(Paragraph("PROFESSIONAL EXPERIENCE", styles["Kicker"]))
-for experience in data["experiences"]:
-    left = [Paragraph(safe(experience["title"]), styles["Subheading"]), Paragraph(safe(experience["company"]), styles["BodySmall"]), Paragraph(safe(experience["period"]), styles["Meta"])]
-    bullets = "<br/>".join([f"- {safe(point)}" for point in experience["points"]])
-    table = Table([[left, Paragraph(bullets, styles["BodySmall"])]], colWidths=[55*mm, 117*mm])
-    table.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP"), ("TOPPADDING", (0,0), (-1,-1), 5), ("BOTTOMPADDING", (0,0), (-1,-1), 6), ("LINEBELOW", (0,0), (-1,-1), .35, LINE)]))
-    story.append(table)
-
-story += [Spacer(1, 5*mm), Paragraph("TECHNICAL CAPABILITY", styles["Kicker"])]
-skills = [
-    ("Android", "Kotlin, Jetpack Compose, XML, Material Design, Android SDK"),
-    ("Architecture", "Clean Architecture, MVVM, Room, Koin, Hilt, modular boundaries"),
-    ("Networking and data", "Ktor, Retrofit, REST APIs, Firebase, SQLite, MongoDB"),
-    ("Product systems", "Maps, Calendar, Drive, Play Billing, RevenueCat, AdMob, media, sensors"),
-    ("Quality and delivery", "Crashlytics, Analytics, Remote Config, crash/ANR triage, Git, Play release"),
+story = [
+    Paragraph(safe(profile["name"]), styles["ResumeName"]),
+    Paragraph("ANDROID ENGINEER | KOTLIN | JETPACK COMPOSE", styles["ResumeTitle"]),
+    Paragraph(safe(f'{profile["location"]} | Relocating to Islamabad | {profile["email"]}'), styles["Contact"]),
+    Paragraph(safe(f'{profile["linkedin"]} | {profile["github"]}'), styles["Contact"]),
+    section("Professional Summary"),
+    Paragraph(
+        "Android Engineer with 3+ years of experience designing, developing, releasing, and maintaining native mobile applications using Kotlin, Java, Android SDK, Jetpack Compose, XML, Clean Architecture, and MVVM. Production experience spans location and maps, productivity, audio and media, AI-assisted utilities, Firebase, REST APIs, Google Play Billing, RevenueCat, AdMob monetization, crash and ANR resolution, and Google Play delivery. Available for remote roles with US and European teams and hybrid opportunities in Islamabad.",
+        styles["Body"],
+    ),
+    section("Professional Experience"),
 ]
-skill_rows = [[Paragraph(safe(title), styles["Subheading"]), Paragraph(safe(value), styles["BodySmall"])] for title, value in skills]
-skill_table = Table(skill_rows, colWidths=[43*mm, 129*mm])
-skill_table.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP"), ("TOPPADDING", (0,0), (-1,-1), 3), ("BOTTOMPADDING", (0,0), (-1,-1), 3)]))
-story += [skill_table, Spacer(1, 6*mm)]
 
-edu = data["education"][0]
-supporting = Table([[
-    [Paragraph("EDUCATION", styles["Kicker"]), Paragraph(safe(edu["degree"]), styles["Subheading"]), Paragraph(safe(f'{edu["school"]} | {edu["period"]} | {edu["detail"]}'), styles["BodySmall"])],
-    [Paragraph("PROFESSIONAL DEVELOPMENT", styles["Kicker"]), Paragraph("M-Labs Summer Program 2024", styles["Subheading"]), Paragraph("Mindstorm Studios | Certificate of Participation", styles["BodySmall"])],
-]], colWidths=[92*mm, 80*mm])
-supporting.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP"), ("TOPPADDING", (0,0), (-1,-1), 6), ("BOTTOMPADDING", (0,0), (-1,-1), 6), ("LINEABOVE", (0,0), (-1,-1), .35, LINE), ("RIGHTPADDING", (0,0), (0,0), 10)]))
-story += [supporting, Spacer(1, 5*mm), Paragraph("AVAILABILITY", styles["Kicker"]), Paragraph("Available for remote roles with US and European teams | Open to hybrid roles in Islamabad | Open to collaborations", styles["Body"]), PageBreak()]
+current_experience = KeepTogether([
+    Paragraph("Android App Developer | Top Edge Technologies (Pvt) Ltd", styles["Role"]),
+    Paragraph("May 2025 - Present | Pakistan", styles["Meta"]),
+    bullet("Engineer and maintain native Android applications using Kotlin, Jetpack Compose, Clean Architecture, MVVM, Room, Ktor, Koin, Firebase, and Google APIs."),
+    bullet("Deliver production features across location, productivity, media, utility, and AI-assisted product categories, from implementation through Google Play release support."),
+    bullet("Diagnose and resolve crashes, Application Not Responding (ANR) issues, lifecycle defects, and regressions in inherited Android codebases using Crashlytics and production evidence."),
+    bullet("Implement and refine AdMob plans and placements, subscriptions, one-time purchases, and premium screens to improve ad show rates, revenue delivery, and purchase conversion opportunities without exposing confidential performance data."),
+    bullet("Designed and built a reusable billing module supporting Google Play Billing and RevenueCat, including purchase acknowledgement, restoration, subscription-state handling, error and retry flows, analytics, and remote configuration; used across multiple company applications."),
+])
 
-story += [Paragraph("PROJECT EXPERIENCE", styles["Kicker"]), Paragraph("Android product work", styles["Heading"]), Paragraph("From-scratch products, earlier work, and focused improvements to inherited production apps. Public install bands describe product scale, not growth attributed solely to my work.", styles["Body"]), Spacer(1, 4*mm), Paragraph("ENGINEERED FROM SCRATCH", styles["Kicker"])]
+previous_experience = KeepTogether([
+    Spacer(1, 2 * mm),
+    Paragraph("Android App Developer | Appsqueeze Technologies (Pvt) Ltd", styles["Role"]),
+    Paragraph("September 2023 - April 2025 | Pakistan", styles["Meta"]),
+    bullet("Developed native Android applications with Kotlin, Java, Android SDK, XML layouts, and Material Design components."),
+    bullet("Applied MVVM, Room, Retrofit, Firebase Authentication, and Firebase Realtime Database to connected, data-driven product features."),
+    bullet("Built responsive user interfaces, debugged production issues, and supported reliable releases across Android versions and device configurations."),
+    bullet("Collaborated through Git-based development workflows and maintained clear ownership of assigned application features."),
+])
 
-def project_table(projects):
-    rows = []
-    for project in projects:
-        title = f'<link href="{escape(project["url"])}" color="#151513"><b>{safe(project["title"])}</b></link>'
-        stack = safe(" | ".join(project["stack"]))
-        rows.append([Paragraph(title + f"<br/><font name='Courier' color='#77756F' size='5.8'>{stack}</font>", styles["ProjectTitle"]), Paragraph(safe(project["signal"]), styles["ProjectSignal"])])
-    table = Table(rows, colWidths=[142*mm, 30*mm], repeatRows=0)
-    table.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP"), ("TOPPADDING", (0,0), (-1,-1), 2.2), ("BOTTOMPADDING", (0,0), (-1,-1), 2.2), ("LINEBELOW", (0,0), (-1,-1), .35, LINE)]))
-    return table
+story += [
+    current_experience,
+    previous_experience,
+    section("Education"),
+    KeepTogether([
+        Paragraph("MS Artificial Intelligence and Autonomous Systems", styles["Role"]),
+        Paragraph("National University of Sciences and Technology (NUST), Islamabad | 2026 - Present", styles["Meta"]),
+        Paragraph("Bachelor of Science in Computer Science", styles["Role"]),
+        Paragraph("Bahauddin Zakariya University, Multan | Completed June 2025 | CGPA: 3.59", styles["Meta"]),
+    ]),
+    section("Professional Development"),
+    Paragraph("M-Labs Summer Program 2024 | Mindstorm Studios | Certificate of Participation", styles["Meta"]),
+    PageBreak(),
+    section("Technical Skills"),
+    skill("Languages and Android", "Kotlin, Java, Android SDK, Jetpack Compose, XML layouts, Material Design, Navigation, lifecycle-aware state, background work, notifications"),
+    skill("Architecture and data", "Clean Architecture, MVVM, modular architecture, Room, SQLite, dependency injection, Koin, Hilt, Ktor, Retrofit, REST APIs"),
+    skill("Firebase and backend", "Firebase Authentication, Realtime Database, Crashlytics, Analytics, Remote Config, MongoDB, Node.js, Socket.io, JavaScript, TypeScript"),
+    skill("Platform integrations", "Google Maps API, location and navigation, Google Calendar, Google Drive, audio and media, sensors, printing"),
+    skill("Billing and monetization", "Google Play Billing, RevenueCat, subscriptions, one-time purchases, purchase acknowledgement, restoration, subscription-state handling, error and retry flows, AdMob, ad placements, premium screens"),
+    skill("Reliability, delivery, and AI", "Crash and ANR triage, production debugging, regression testing, Git, Google Play releases; Claude, Codex, ChatGPT, and Antigravity for AI-assisted engineering"),
+    section("Selected Android Projects"),
+    Paragraph("Public install bands indicate product scale on Google Play and are not presented as growth attributed solely to my work.", styles["Note"]),
+]
 
-story.append(project_table(data["scratchProjects"]))
-story += [Spacer(1, 3.5*mm), Paragraph("EARLIER WORK", styles["Kicker"]), project_table(data["otherProjects"]), Spacer(1, 3.5*mm)]
+project_by_slug = {project["slug"]: project for project in data["scratchProjects"]}
+for slug in ["plant-identifier", "schedule-planner", "route-planner", "voice-recorder"]:
+    project = project_by_slug[slug]
+    story.append(project_line(project["title"], project["signal"], f'{project["summary"]} Technologies: {", ".join(project["stack"])}.'))
 
-story += [Paragraph("PRODUCTION MAINTENANCE", styles["Kicker"]), Paragraph("Inherited products, focused improvements", styles["Heading"])]
-maintenance_rows = []
+story.append(section("Additional Android Apps Engineered from Scratch"))
+for project in data["scratchProjects"]:
+    if project["slug"] in {"plant-identifier", "schedule-planner", "route-planner", "voice-recorder"}:
+        continue
+    story.append(compact_project_line(project["title"], project["signal"], f'{", ".join(project["stack"])}'))
+
+story.append(section("Production Maintenance and Product Improvements"))
 for app in data["maintenanceApps"]:
-    title = f'<link href="{escape(app["url"])}" color="#151513"><b>{safe(app["title"])}</b></link>'
-    maintenance_rows.append([Paragraph(title + f"<br/><font color='#66645E' size='7.4'>{safe(app['contribution'])}</font>", styles["ProjectTitle"]), Paragraph(safe(app["signal"]), styles["ProjectSignal"])])
-maintenance = Table(maintenance_rows, colWidths=[142*mm, 30*mm])
-maintenance.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP"), ("TOPPADDING", (0,0), (-1,-1), 2.2), ("BOTTOMPADDING", (0,0), (-1,-1), 2.2), ("LINEBELOW", (0,0), (-1,-1), .35, LINE)]))
-story += [maintenance]
+    story.append(compact_project_line(app["title"], app["signal"], app["contribution"]))
 
-doc.build(story, onFirstPage=footer, onLaterPages=footer)
+story.append(section("Earlier Projects"))
+earlier_project_details = {
+    "ai-chatbot": "Kotlin, Firebase Authentication, REST APIs, Room; real-time chat and image generation",
+    "crypto-communication": "Kotlin, Next.js, Node.js, Socket.io; encrypted Android and web messaging",
+}
+for project in data["otherProjects"]:
+    story.append(compact_project_line(project["title"], project["signal"], earlier_project_details[project["slug"]]))
+
+doc.build(story)
 shutil.copyfile(OUTPUT, PUBLIC)
 print(OUTPUT)
