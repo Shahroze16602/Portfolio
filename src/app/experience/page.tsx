@@ -1,0 +1,10 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { education, experiences } from "../data/content";
+
+export const metadata: Metadata = { title: "Experience", description: "Muhammad Shahroze's Android engineering experience and education.", alternates: { canonical: "/experience" } };
+
+export default function ExperiencePage() {
+  return <main id="main-content" className="page-shell pt-[4.75rem]" tabIndex={-1}><header className="container-wide py-14 md:py-20"><p className="eyebrow">Experience / 02</p><h1 className="display-lg mt-7 max-w-[11ch]">Three years of increasingly production-heavy Android work.</h1></header><section className="border-section"><div className="container-wide py-10 md:py-16">{experiences.map((experience, index) => <article key={experience.company} className="grid gap-6 border-t border-black/25 py-9 lg:grid-cols-[3rem_.7fr_1.3fr]"><span className="index-number">0{index + 1}</span><div><h2 className="font-display text-3xl font-semibold tracking-[-.045em]">{experience.title}</h2><p className="mt-2 text-blue-700">{experience.company}</p><p className="mt-3 font-mono text-[.61rem] uppercase tracking-[.08em] text-stone-500">{experience.period}</p></div><ul className="space-y-3 text-lg leading-relaxed text-stone-700">{experience.points.map((point) => <li key={point} className="border-b border-black/10 pb-3">{point}</li>)}</ul></article>)}<article className="grid gap-6 border-y border-black/25 py-9 lg:grid-cols-[3rem_.7fr_1.3fr]"><span className="index-number">03</span><div><h2 className="font-display text-3xl font-semibold">Education</h2></div><div><h3 className="font-display text-2xl font-semibold">{education[0].degree}</h3><p className="mt-2 text-stone-600">{education[0].school}</p><p className="mt-2 text-blue-700">{education[0].period} · {education[0].detail}</p></div></article><div className="mt-10 flex flex-wrap gap-3"><Link href="/resume" className="button button-primary">Full résumé <ArrowUpRight size={14} /></Link><Link href="/projects" className="button button-secondary">View work</Link></div></div></section></main>;
+}

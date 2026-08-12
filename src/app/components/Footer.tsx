@@ -1,30 +1,17 @@
-export default function Footer() {
-    return (
-        <footer className="bg-[#0a0a0a] text-white py-24 px-6 md:px-12 border-t border-white/10">
-            <div className="max-w-[1400px] mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24">
-                    <h2 className="text-[12vw] leading-[0.8] font-bold tracking-tighter uppercase">
-                        Let's
-                        <br />
-                        Talk
-                    </h2>
-                    <div className="mt-12 md:mt-0 flex flex-col gap-4 text-right">
-                        <a href="mailto:smshahroze16602@gmail.com" className="text-2xl md:text-3xl hover:text-accent transition-colors">
-                            smshahroze16602@gmail.com
-                        </a>
-                        <p className="text-gray-500">
-                            Multan, Pakistan
-                        </p>
-                    </div>
-                </div>
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { profile } from "../data/content";
 
-                <div className="flex justify-between items-center text-sm font-mono text-gray-600 uppercase tracking-wider border-t border-white/10 pt-8">
-                    <p>© 2025 Muhammad Shahroze</p>
-                    <div className="flex gap-8">
-                        <a href="https://linkedin.com/in/muhammad-shahroze" className="hover:text-white transition-colors">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
+const links = [["Work", "/projects"], ["Skills", "/skills"], ["AI Workflow", "/ai-workflow"], ["Profile", "/about"], ["Experience", "/experience"], ["Services", "/work-with-me"], ["Process", "/process"], ["Journal", "/insights"], ["Privacy", "/privacy"]];
+
+export default function Footer() {
+  return <footer className="no-print editorial-panel">
+    <div className="container-wide py-14 md:py-20">
+      <div className="grid gap-12 border-b border-white/20 pb-14 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
+        <div><p className="eyebrow">Open to the right problems</p><h2 className="display-md mt-6 max-w-4xl">Employment, product work, and collaborations with real engineering depth.</h2></div>
+        <div className="lg:text-right"><Link href="/contact" className="button button-secondary">Choose an inquiry <ArrowUpRight size={15} /></Link><a href={`mailto:${profile.email}`} className="mt-5 block break-all text-sm text-stone-300 hover:text-white">{profile.email}</a></div>
+      </div>
+      <div className="grid gap-8 pt-8 md:grid-cols-[1fr_2fr] md:items-end"><p className="font-mono text-[.62rem] uppercase leading-relaxed tracking-[.1em] text-stone-400">© {new Date().getFullYear()} Muhammad Shahroze<br />Remote US / Europe · Hybrid Islamabad · Collaborations</p><nav aria-label="Footer navigation" className="flex flex-wrap gap-x-5 gap-y-3 md:justify-end">{links.map(([label, href]) => <Link key={href} href={href} className="font-mono text-[.62rem] uppercase tracking-[.09em] text-stone-300 hover:text-white">{label}</Link>)}</nav></div>
+    </div>
+  </footer>;
 }
