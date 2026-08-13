@@ -84,7 +84,7 @@ profile = data["profile"]
 story = [
     Paragraph(safe(profile["name"]), styles["ResumeName"]),
     Paragraph("ANDROID ENGINEER | KOTLIN | JETPACK COMPOSE", styles["ResumeTitle"]),
-    Paragraph(safe(f'{profile["location"]} | Relocating to Islamabad | {profile["email"]}'), styles["Contact"]),
+    Paragraph(safe(f'{profile["location"]} | {profile["email"]}'), styles["Contact"]),
     Paragraph(safe(f'{profile["linkedin"]} | {profile["github"]}'), styles["Contact"]),
     section("Professional Summary"),
     Paragraph(
@@ -122,7 +122,7 @@ story += [
         Paragraph("MS Artificial Intelligence and Autonomous Systems", styles["Role"]),
         Paragraph("National University of Sciences and Technology (NUST), Islamabad | 2026 - Present", styles["Meta"]),
         Paragraph("Bachelor of Science in Computer Science", styles["Role"]),
-        Paragraph("Bahauddin Zakariya University, Multan | Completed June 2025 | CGPA: 3.59", styles["Meta"]),
+        Paragraph("Bahauddin Zakariya University | Completed June 2025 | CGPA: 3.59", styles["Meta"]),
     ]),
     section("Professional Development"),
     Paragraph("M-Labs Summer Program 2024 | Mindstorm Studios | Certificate of Participation", styles["Meta"]),

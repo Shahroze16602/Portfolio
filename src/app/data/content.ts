@@ -84,8 +84,7 @@ export const profile = {
   name: "Muhammad Shahroze",
   title: "Android Engineer",
   email: "smshahroze16602@gmail.com",
-  location: "Multan, Pakistan",
-  relocation: "Relocating to Islamabad",
+  location: "Islamabad, Pakistan",
   timezone: "UTC+5",
   experience: "3+ years",
   linkedin: "https://linkedin.com/in/muhammad-shahroze",
@@ -597,7 +596,7 @@ export const experiences = [
 ];
 
 export const education = [
-  { degree: "Bachelor of Science in Computer Science", school: "Bahauddin Zakariya University, Multan", period: "Completed June 2025", detail: "CGPA 3.59" },
+  { degree: "Bachelor of Science in Computer Science", school: "Bahauddin Zakariya University", period: "Completed June 2025", detail: "CGPA 3.59" },
 ];
 
 export const insights: Insight[] = [

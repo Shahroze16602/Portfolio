@@ -70,14 +70,13 @@ The homepage should primarily persuade employers because that is the main acquis
 
 Confirmed location and education context:
 
-- currently based in Multan, Pakistan;
-- planning to relocate to Islamabad;
+- currently based in Islamabad, Pakistan;
 - applied for the MS in AI and Autonomous Systems at NUST, with studies planned to begin in September 2026;
 - 3+ years of Android development experience.
 
 Do not add immigration-status copy. Until admission is formally confirmed, do not describe Muhammad as enrolled at NUST. A safe current line is:
 
-> Based in Multan and relocating to Islamabad · MS AI and Autonomous Systems applicant at NUST · Open to remote roles with US and European teams, hybrid opportunities in Islamabad, freelance products, and collaborations.
+> Based in Islamabad · MS AI and Autonomous Systems applicant at NUST · Open to remote roles with US and European teams, hybrid opportunities in Islamabad, freelance products, and collaborations.
 
 ### Priority audiences
 
@@ -112,7 +111,7 @@ Recommended direction:
 
 Supporting availability line:
 
-> Based in Multan and relocating to Islamabad · Open to remote roles with US and European teams, hybrid opportunities in Islamabad, freelance products, and collaborations.
+> Based in Islamabad · Open to remote roles with US and European teams, hybrid opportunities in Islamabad, freelance products, and collaborations.
 
 This is more specific, keyword-relevant, and useful to both recruiters and clients. The final wording should match the exact opportunities Muhammad wants.
 
@@ -368,7 +367,7 @@ The internal billing module is an especially strong trust signal because it demo
 
 ### 7. About preview
 
-One authentic paragraph, one candid photo, a location/time-zone note, the planned Islamabad move and NUST application stated accurately, and a link to the full story.
+One authentic paragraph, one candid photo, an Islamabad location/time-zone note, the NUST application stated accurately, and a link to the full story.
 
 ### 8. Conversion section
 
@@ -756,12 +755,12 @@ Rebuild using section 9 and generate metadata/social imagery from canonical proj
 - Principles have no examples.
 - No current learning, product interests, collaboration style, or community signal.
 - No route metadata.
-- No accurate NUST application/planned-relocation context.
+- No accurate NUST application and current Islamabad context.
 - No explanation of the AI-assisted engineering workflow.
 
 ### Recommendation
 
-Add a short career timeline, one authentic image, a more personal origin story, concrete examples for principles, and what kind of work Muhammad wants next. Include the planned move from Multan to Islamabad, the NUST application with September 2026 planned start, and the AI-assisted workflow from section 8 without describing admission as confirmed.
+Add a short career timeline, one authentic image, a more personal origin story, concrete examples for principles, and what kind of work Muhammad wants next. Include the current Islamabad location, the NUST application with September 2026 planned start, and the AI-assisted workflow from section 8 without describing admission as confirmed.
 
 ## `/resume`
 
@@ -1201,7 +1200,7 @@ The website is the destination, not the entire acquisition strategy. Create usef
 **Goal:** make the site useful before making it more elaborate.
 
 - [ ] Rewrite hero positioning.
-- [ ] Update experience copy to `3+ years` and add accurate Multan/Islamabad availability.
+- [ ] Update experience copy to `3+ years` and add accurate Islamabad availability.
 - [ ] Add hero CTAs and availability.
 - [ ] Shorten or make the intro skippable.
 - [ ] Replace vanity stats with verified proof.
@@ -1275,7 +1274,7 @@ The website is the destination, not the entire acquisition strategy. Create usef
 | RESUME-01 | `ResumeActions.tsx` | P0 | Separate real PDF download from print |
 | NAV-01 | `Header.tsx` | P1 | Complete mobile menu, active route, reliable contrast, focus states |
 | CONTACT-01 | `contact/page.tsx` | P1 | Add qualified form/response expectations if desired |
-| ABOUT-01 | about page/components | P1 | Add 3+ year timeline, planned Islamabad move, accurate NUST application status, and AI-assisted workflow |
+| ABOUT-01 | about page/components | P1 | Add 3+ year timeline, current Islamabad location, accurate NUST application status, and AI-assisted workflow |
 | SERVICES-01 | new work-with-me route | P1 | Explain freelance fit, engagement process, deliverables, boundaries, and inquiry CTA |
 | FOOTER-01 | `Contact.tsx` / `Footer.tsx` | P1 | Consolidate into a semantic global footer and remove stale duplicate |
 | A11Y-01 | `globals.css` and motion components | P0 | Add reduced motion, focus visible, skip link, and contrast fixes |
