@@ -201,12 +201,3 @@ textarea.field { min-height: 10rem; resize: vertical; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
-
-@media print {
-  @page { size: A4; margin: 13mm; }
-  body { background: white !important; color: #111 !important; }
-  .no-print, header, footer { display: none !important; }
-  .print-sheet { padding: 0 !important; }
-  .print-sheet * { color: #111 !important; background: transparent !important; box-shadow: none !important; }
-  .print-break-avoid { break-inside: avoid; }
-}

@@ -5,7 +5,7 @@ import { profile } from "../data/content";
 const links = [["Work", "/projects"], ["Skills", "/skills"], ["AI Workflow", "/ai-workflow"], ["Profile", "/about"], ["Experience", "/experience"], ["Services", "/work-with-me"], ["Process", "/process"], ["Journal", "/insights"], ["Privacy", "/privacy"]];
 
 export default function Footer() {
-  return <footer className="no-print editorial-panel">
+  return <footer className="editorial-panel">
     <div className="container-wide py-14 md:py-20">
       <div className="grid gap-12 border-b border-white/20 pb-14 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
         <div><p className="eyebrow">Open to the right problems</p><h2 className="display-md mt-6 max-w-4xl">Employment, product work, and collaborations with real engineering depth.</h2></div>

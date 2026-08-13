@@ -21,7 +21,7 @@ const navigation = [
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  return <header className="no-print fixed inset-x-0 top-0 z-50 border-b border-black/15 bg-[#f1efe8]/92 backdrop-blur-xl">
+  return <header className="fixed inset-x-0 top-0 z-50 border-b border-black/15 bg-[#f1efe8]/92 backdrop-blur-xl">
     <div className="container-wide flex h-[4.75rem] items-center justify-between">
       <Link href="/" className="group flex items-center gap-3" aria-label="Muhammad Shahroze, home">
         <BrandMark />
